@@ -1,0 +1,28 @@
+#! /usr/bin/env gosh
+
+;; Run the wiki as a CGI script.
+
+(use dbm.ndbm)
+(use wiliki)
+
+(define (main args)
+  (wiliki-main
+   (make <wiliki>
+     :db-type <ndbm>
+     :db-path "/data/community.dbm"
+     :log-file "/data/community.log"
+     :event-log-file "/data/community-event.log"
+     :style-sheet "wiki.css"
+     :top-page "Community-Scheme-Wiki"
+     :title "Scheme Wiki"
+     :description "Scheme Wiki"
+     :language 'en
+     :charsets '((jp . utf-8)
+                 (en . utf-8))
+     :image-urls '()
+     :debug-level 0)))
+
+;; Emacs:
+;; Local variables:
+;; mode: scheme
+;; end:
