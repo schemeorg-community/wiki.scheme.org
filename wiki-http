@@ -5,17 +5,18 @@
 (use makiki)
 (use makiki.cgi)
 
-(add-load-path "." :relative)  ; To load "wiki-cgi".
+(add-load-path "cgi-bin" :relative)
 
 (define (main args)
   (start-http-server :access-log #t :error-log #t :port 80)
   0)
 
 (define-http-handler "/"
-  (cgi-script "wiki-cgi" :script-name "/" :forwarded #t))
+  (cgi-script "scheme.cgi" :script-name "/" :forwarded #t))
 
 ;; If you serve static content via Makiki, add file-handler for them.
-(define-http-handler "/wiki.css" (file-handler))
+(define-http-handler "/static"
+  (file-handler :root "www"))
 
 ;; Emacs:
 ;; Local variables:

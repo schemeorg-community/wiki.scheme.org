@@ -26,18 +26,12 @@ RUN make install
 
 ## Wiliki
 
-WORKDIR /build
-RUN git clone https://github.com/schemeorg/wiliki.git -b lassik wiliki
-WORKDIR /build/wiliki
-#RUN ./configure
-RUN make
-RUN make install
-
-## Wliki wrapper
-
-WORKDIR /usr/local/share/wiki.scheme.org
-ADD wiki-cgi wiki-http ./
-RUN chmod +x wiki-cgi wiki-http
+#WORKDIR /build
+#RUN git clone https://github.com/schemeorg/wiliki.git -b lassik wiliki
+#WORKDIR /build/wiliki
+##RUN ./configure
+#RUN make
+#RUN make install
 
 ## Run
 
@@ -46,6 +40,13 @@ RUN apt-get update && apt-get -y --no-install-recommends install \
       netbase libgdbm6 libgdbm-compat4 zlib1g \
  && rm -rf /var/lib/apt/lists/*
 COPY --from=build /usr/local/ /usr/local/
-WORKDIR /data
+WORKDIR /
+ADD https://misc.lassi.io/2021/community-scheme-wiki-2021-05-22.tar.gz csw.tgz
+RUN tar -xf csw.tgz && rm csw.tgz && rm -rf csw/data
+RUN mkdir -p /home/vhost/csw/data
+RUN ln -s /home/vhost/csw/data /data
+WORKDIR /csw
+ADD wiki-http wiki-http
+RUN chmod +x wiki-http
 EXPOSE 80
-CMD ["/usr/local/share/wiki.scheme.org/wiki-http"]
+CMD ["/csw/wiki-http"]
